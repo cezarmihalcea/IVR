@@ -58,19 +58,6 @@ class image_converter:
     return np.array([cx, cy])
   
   def detect_red(self, image):
-    mask = cv2.inRange(image, (100,0,0), (255,0,0))
-    
-    kernel = np.ones((5, 5), np.uint8)
-    mask = cv2.dilate(mask, kernel, iterations = 3)
-    
-    m = cv2.moments(mask)
-    
-    cx = int(m['m10'] / m['m00'])
-    cy = int(m['m01'] / m['m00'])
-    
-    return np.array([cx, cy])
-  
-  def detect_blue(self, image):
     mask = cv2.inRange(image, (0,0,100), (0,0,255))
     
     kernel = np.ones((5, 5), np.uint8)
@@ -83,8 +70,21 @@ class image_converter:
     
     return np.array([cx, cy])
   
+  def detect_blue(self, image):
+    mask = cv2.inRange(image, (100,0,0), (255,0,0))
+    
+    kernel = np.ones((5, 5), np.uint8)
+    mask = cv2.dilate(mask, kernel, iterations = 3)
+    
+    m = cv2.moments(mask)
+    
+    cx = int(m['m10'] / m['m00'])
+    cy = int(m['m01'] / m['m00'])
+    
+    return np.array([cx, cy])
+  
   def detect_yellow(self, image):
-    mask = cv2.inRange(image, (100,100,0), (255,255,0))
+    mask = cv2.inRange(image, (0,100,100), (0,255,255))
     
     kernel = np.ones((5, 5), np.uint8)
     mask = cv2.dilate(mask, kernel, iterations = 3)
