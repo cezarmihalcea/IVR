@@ -45,9 +45,9 @@ class image_converter:
     return np.array([x_d, y_d])
   
   def detect_green(self, image):
-	mask = cv2.inRange(image, (0,100,0), (0,255,0))
+    mask = cv2.inRange(image, (0,100,0), (0,255,0))
     
-    kernel = np.ones((5, 5), np.unit8)
+    kernel = np.ones((5, 5), np.uint8)
     mask = cv2.dilate(mask, kernel, iterations = 3)
     
     m = cv2.moments(mask)
@@ -58,9 +58,9 @@ class image_converter:
     return np.array([cx, cy])
   
   def detect_red(self, image):
-	mask = cv2.inRange(image, (100,0,0), (255,0,0))
+    mask = cv2.inRange(image, (100,0,0), (255,0,0))
     
-    kernel = np.ones((5, 5), np.unit8)
+    kernel = np.ones((5, 5), np.uint8)
     mask = cv2.dilate(mask, kernel, iterations = 3)
     
     m = cv2.moments(mask)
@@ -71,9 +71,9 @@ class image_converter:
     return np.array([cx, cy])
   
   def detect_blue(self, image):
-	mask = cv2.inRange(image, (0,0,100), (0,0,255))
+    mask = cv2.inRange(image, (0,0,100), (0,0,255))
     
-    kernel = np.ones((5, 5), np.unit8)
+    kernel = np.ones((5, 5), np.uint8)
     mask = cv2.dilate(mask, kernel, iterations = 3)
     
     m = cv2.moments(mask)
@@ -84,9 +84,9 @@ class image_converter:
     return np.array([cx, cy])
   
   def detect_yellow(self, image):
-	mask = cv2.inRange(image, (100,100,0), (255,255,0))
+    mask = cv2.inRange(image, (100,100,0), (255,255,0))
     
-    kernel = np.ones((5, 5), np.unit8)
+    kernel = np.ones((5, 5), np.uint8)
     mask = cv2.dilate(mask, kernel, iterations = 3)
     
     m = cv2.moments(mask)
@@ -105,9 +105,9 @@ class image_converter:
 	return 3 / np.sqrt(dist)
 	
   def detect_joint_angles(self, image):
-	a = self.pixel2meter(image)
+    a = self.pixel2meter(image)
 	
-	center = a * self.detect_yellow(image)
+    center = a * self.detect_yellow(image)
     circle1pos = a * self.detect_blue(image)
     circle2pos = a * self.detect_green(image)
     circle3pos = a * self.detect_red(image)
@@ -139,7 +139,7 @@ class image_converter:
     cv2.imshow('window', cv_image)
     cv2.waitKey(3)
     
-    jointsData = detect_joint_angles(cv_image)
+    jointsData = self.detect_joint_angles(cv_image)
     
     # change te value of self.joint.data to your estimated value from thew images once you have finalized the code
     self.joints = Float64MultiArray()
