@@ -1,8 +1,8 @@
-# Install script for directory: /home/dice/IVR/catkin_ws/src/ivr_lab
+# Install script for directory: /home/cezar/Projects/IVR/catkin_ws/src/ivr_lab
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/dice/IVR/catkin_ws/install")
+  set(CMAKE_INSTALL_PREFIX "/home/cezar/Projects/IVR/catkin_ws/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -38,17 +38,17 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/dice/IVR/catkin_ws/build/ivr_lab/catkin_generated/installspace/ivr_lab.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/cezar/Projects/IVR/catkin_ws/build/ivr_lab/catkin_generated/installspace/ivr_lab.pc")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/ivr_lab/cmake" TYPE FILE FILES
-    "/home/dice/IVR/catkin_ws/build/ivr_lab/catkin_generated/installspace/ivr_labConfig.cmake"
-    "/home/dice/IVR/catkin_ws/build/ivr_lab/catkin_generated/installspace/ivr_labConfig-version.cmake"
+    "/home/cezar/Projects/IVR/catkin_ws/build/ivr_lab/catkin_generated/installspace/ivr_labConfig.cmake"
+    "/home/cezar/Projects/IVR/catkin_ws/build/ivr_lab/catkin_generated/installspace/ivr_labConfig-version.cmake"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/ivr_lab" TYPE FILE FILES "/home/dice/IVR/catkin_ws/src/ivr_lab/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/ivr_lab" TYPE FILE FILES "/home/cezar/Projects/IVR/catkin_ws/src/ivr_lab/package.xml")
 endif()
 

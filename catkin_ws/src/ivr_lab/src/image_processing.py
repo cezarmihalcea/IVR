@@ -201,5 +201,3 @@ def main(args):
 # run the code if the node is called
 if __name__ == '__main__':
     main(sys.argv)
-
-

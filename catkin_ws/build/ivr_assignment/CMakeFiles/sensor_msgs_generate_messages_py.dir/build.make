@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/dice/IVR/catkin_ws/src
+CMAKE_SOURCE_DIR = /home/cezar/Projects/IVR/catkin_ws/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/dice/IVR/catkin_ws/build
+CMAKE_BINARY_DIR = /home/cezar/Projects/IVR/catkin_ws/build
 
 # Utility rule file for sensor_msgs_generate_messages_py.
 
@@ -63,10 +63,10 @@ ivr_assignment/CMakeFiles/sensor_msgs_generate_messages_py.dir/build: sensor_msg
 .PHONY : ivr_assignment/CMakeFiles/sensor_msgs_generate_messages_py.dir/build
 
 ivr_assignment/CMakeFiles/sensor_msgs_generate_messages_py.dir/clean:
-	cd /home/dice/IVR/catkin_ws/build/ivr_assignment && $(CMAKE_COMMAND) -P CMakeFiles/sensor_msgs_generate_messages_py.dir/cmake_clean.cmake
+	cd /home/cezar/Projects/IVR/catkin_ws/build/ivr_assignment && $(CMAKE_COMMAND) -P CMakeFiles/sensor_msgs_generate_messages_py.dir/cmake_clean.cmake
 .PHONY : ivr_assignment/CMakeFiles/sensor_msgs_generate_messages_py.dir/clean
 
 ivr_assignment/CMakeFiles/sensor_msgs_generate_messages_py.dir/depend:
-	cd /home/dice/IVR/catkin_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/dice/IVR/catkin_ws/src /home/dice/IVR/catkin_ws/src/ivr_assignment /home/dice/IVR/catkin_ws/build /home/dice/IVR/catkin_ws/build/ivr_assignment /home/dice/IVR/catkin_ws/build/ivr_assignment/CMakeFiles/sensor_msgs_generate_messages_py.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/cezar/Projects/IVR/catkin_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/cezar/Projects/IVR/catkin_ws/src /home/cezar/Projects/IVR/catkin_ws/src/ivr_assignment /home/cezar/Projects/IVR/catkin_ws/build /home/cezar/Projects/IVR/catkin_ws/build/ivr_assignment /home/cezar/Projects/IVR/catkin_ws/build/ivr_assignment/CMakeFiles/sensor_msgs_generate_messages_py.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : ivr_assignment/CMakeFiles/sensor_msgs_generate_messages_py.dir/depend
 

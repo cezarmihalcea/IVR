@@ -1,8 +1,8 @@
-# Install script for directory: /home/dice/IVR/catkin_ws/src/ivr_assignment
+# Install script for directory: /home/cezar/Projects/IVR/catkin_ws/src/ivr_assignment
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/dice/IVR/catkin_ws/install")
+  set(CMAKE_INSTALL_PREFIX "/home/cezar/Projects/IVR/catkin_ws/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -38,17 +38,17 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/dice/IVR/catkin_ws/build/ivr_assignment/catkin_generated/installspace/ivr_assignment.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/cezar/Projects/IVR/catkin_ws/build/ivr_assignment/catkin_generated/installspace/ivr_assignment.pc")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/ivr_assignment/cmake" TYPE FILE FILES
-    "/home/dice/IVR/catkin_ws/build/ivr_assignment/catkin_generated/installspace/ivr_assignmentConfig.cmake"
-    "/home/dice/IVR/catkin_ws/build/ivr_assignment/catkin_generated/installspace/ivr_assignmentConfig-version.cmake"
+    "/home/cezar/Projects/IVR/catkin_ws/build/ivr_assignment/catkin_generated/installspace/ivr_assignmentConfig.cmake"
+    "/home/cezar/Projects/IVR/catkin_ws/build/ivr_assignment/catkin_generated/installspace/ivr_assignmentConfig-version.cmake"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/ivr_assignment" TYPE FILE FILES "/home/dice/IVR/catkin_ws/src/ivr_assignment/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/ivr_assignment" TYPE FILE FILES "/home/cezar/Projects/IVR/catkin_ws/src/ivr_assignment/package.xml")
 endif()
 
