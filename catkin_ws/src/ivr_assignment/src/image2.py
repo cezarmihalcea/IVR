@@ -75,28 +75,6 @@ class image_converter:
     cy = int(m['m01'] / m['m00'])
     
     return np.array([cz, cy])
-  
-  def pixel2meter(self, image):
-	circle1pos = self.detect_blue(image)
-	circle2pos = self.detect_green(image)
-	
-	dist = np.sum((circle1pos - circle2pos)**2)
-	
-	return 3 / np.sqrt(dist)
-	
-  def detect_joint_angles(self, image):
-    a = self.pixel2meter(image)
-	
-    center = a * self.detect_yellow(image)
-    circle1pos = a * self.detect_blue(image)
-    circle2pos = a * self.detect_green(image)
-    circle3pos = a * self.detect_red(image)
-    
-    ja1 = np.arctan2(center[0] - circle1pos[0], center[1] - circle1pos[1])
-    ja2 = np.arctan2(circle1pos[0] - circle2pos[0], circle1pos[1] - circle2pos[1]) - ja1
-    ja3 = np.arctan2(circle2pos[0] - circle3pos[0], circle2pos[1] - circle3pos[1]) - ja1 - ja2
-    
-    return np.array([ja1, ja2, ja3])
       
   # Recieve data, process it, and publish
   def callback2(self,data):
@@ -108,11 +86,6 @@ class image_converter:
 
     # Uncomment if you want to save the image
     #cv2.imwrite('image_copy.png', cv_image)
-
-    jointsData = self.detect_joint_angles(cv_image2)
-
-    self.joints = Float64MultiArray()
-    self.joints.data = jointsData
 
     im2=cv2.imshow('window2', self.cv_image2)
     cv2.waitKey(1)

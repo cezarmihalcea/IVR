@@ -12,6 +12,12 @@ from std_msgs.msg import Float64MultiArray, Float64
 from cv_bridge import CvBridge, CvBridgeError
 
 class angle_calculator
+	
+	def __init__(self):
+		self.joints_pub = rospy.Publisher("joints_pos",Float64MultiArray, queue_size=10)
+		self.image_sub1 = rospy.Subscriber("/camera1/robot/image_raw",Image,self.callback1)
+		self.image_sub1 = rospy.Subscriber("/camera1/robot/image_raw",Image,self.callback2)
+		self.bridge = CvBridge()
 
 	def detect3dyellow(self, img1, img2):
 		yellowXY = image1.detect_yellow(img1)
@@ -54,7 +60,6 @@ class angle_calculator
 		vectYB = blue - yellow
 		vectBG = green - blue
 		vectGR = red - green
-		vect0 = np.array([blue[0], blue[1], 0])
 
 		'''
 		distYB = 2 / np.sqrt(np.sum(vectYB**2))
@@ -71,7 +76,13 @@ class angle_calculator
 		cosBGR = dotBGR / (distBG * distGR)
 		'''
 
-		angle1 = anglebetween(vect0, vectYB)
+		angle1 = np.arccos(0)
 		angle2 = anglebetween(vectYB, vectBG)
 		angle3 = anglebetween(vectBG, vectGR)
 
+	def callback(self, data):
+		try:
+	      cv_image1 = self.bridge.imgmsg_to_cv2(data, "bgr8")
+	      cv_image2 = self.bridge.imgmsg_to_cv2(data, "bgr8")
+	    except CvBridgeError as e:
+	      print(e)
