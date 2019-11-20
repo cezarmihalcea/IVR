@@ -10,6 +10,57 @@ from sensor_msgs.msg import Image
 from std_msgs.msg import Float64MultiArray, Float64
 from cv_bridge import CvBridge, CvBridgeError
 
+def detect_green(image):
+  mask = cv2.inRange(image, (0,100,0), (0,255,0))
+  
+  kernel = np.ones((5, 5), np.uint8)
+  mask = cv2.dilate(mask, kernel, iterations = 3)
+  
+  m = cv2.moments(mask)
+  
+  cx = int(m['m10'] / m['m00'])
+  cy = int(m['m01'] / m['m00'])
+  
+  return np.array([cx, cy])
+
+def detect_red(image):
+  mask = cv2.inRange(image, (0,0,100), (0,0,255))
+  
+  kernel = np.ones((5, 5), np.uint8)
+  mask = cv2.dilate(mask, kernel, iterations = 3)
+  
+  m = cv2.moments(mask)
+  
+  cx = int(m['m10'] / m['m00'])
+  cy = int(m['m01'] / m['m00'])
+  
+  return np.array([cx, cy])
+
+def detect_blue(image):
+  mask = cv2.inRange(image, (100,0,0), (255,0,0))
+  
+  kernel = np.ones((5, 5), np.uint8)
+  mask = cv2.dilate(mask, kernel, iterations = 3)
+  
+  m = cv2.moments(mask)
+  
+  cx = int(m['m10'] / m['m00'])
+  cy = int(m['m01'] / m['m00'])
+  
+  return np.array([cx, cy])
+
+def detect_yellow(image):
+  mask = cv2.inRange(image, (0,100,100), (0,255,255))
+  
+  kernel = np.ones((5, 5), np.uint8)
+  mask = cv2.dilate(mask, kernel, iterations = 3)
+  
+  m = cv2.moments(mask)
+  
+  cx = int(m['m10'] / m['m00'])
+  cy = int(m['m01'] / m['m00'])
+  
+  return np.array([cx, cy])
 
 class image_converter:
 
@@ -23,58 +74,6 @@ class image_converter:
     self.image_sub1 = rospy.Subscriber("/camera1/robot/image_raw",Image,self.callback1)
     # initialize the bridge between openCV and ROS
     self.bridge = CvBridge() 
-
-  def detect_green(self, image):
-    mask = cv2.inRange(image, (0,100,0), (0,255,0))
-    
-    kernel = np.ones((5, 5), np.uint8)
-    mask = cv2.dilate(mask, kernel, iterations = 3)
-    
-    m = cv2.moments(mask)
-    
-    cx = int(m['m10'] / m['m00'])
-    cy = int(m['m01'] / m['m00'])
-    
-    return np.array([cx, cy])
-  
-  def detect_red(self, image):
-    mask = cv2.inRange(image, (0,0,100), (0,0,255))
-    
-    kernel = np.ones((5, 5), np.uint8)
-    mask = cv2.dilate(mask, kernel, iterations = 3)
-    
-    m = cv2.moments(mask)
-    
-    cx = int(m['m10'] / m['m00'])
-    cy = int(m['m01'] / m['m00'])
-    
-    return np.array([cx, cy])
-  
-  def detect_blue(self, image):
-    mask = cv2.inRange(image, (100,0,0), (255,0,0))
-    
-    kernel = np.ones((5, 5), np.uint8)
-    mask = cv2.dilate(mask, kernel, iterations = 3)
-    
-    m = cv2.moments(mask)
-    
-    cx = int(m['m10'] / m['m00'])
-    cy = int(m['m01'] / m['m00'])
-    
-    return np.array([cx, cy])
-  
-  def detect_yellow(self, image):
-    mask = cv2.inRange(image, (0,100,100), (0,255,255))
-    
-    kernel = np.ones((5, 5), np.uint8)
-    mask = cv2.dilate(mask, kernel, iterations = 3)
-    
-    m = cv2.moments(mask)
-    
-    cx = int(m['m10'] / m['m00'])
-    cy = int(m['m01'] / m['m00'])
-    
-    return np.array([cx, cy])
       
   # Recieve data from camera 1, process it, and publish
   def callback1(self,data):

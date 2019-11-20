@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import image1
 import image2
 
@@ -6,17 +8,27 @@ import sys
 import rospy
 import cv2
 import numpy as np
+import message_filters
 from std_msgs.msg import String
 from sensor_msgs.msg import Image
 from std_msgs.msg import Float64MultiArray, Float64
 from cv_bridge import CvBridge, CvBridgeError
 
-class angle_calculator
+class angle_calculator:
 	
 	def __init__(self):
-		self.joints_pub = rospy.Publisher("joints_pos",Float64MultiArray, queue_size=10)
-		self.image_sub1 = rospy.Subscriber("/camera1/robot/image_raw",Image,self.callback1)
-		self.image_sub1 = rospy.Subscriber("/camera1/robot/image_raw",Image,self.callback2)
+		rospy.init_node('image_processing', anonymous=True)
+
+		self.joints_pub = rospy.Publisher("joints_pos", Float64MultiArray, queue_size=10)
+
+		self.image_pub1 = rospy.Publisher("image_topic1", Image, queue_size = 1)
+		self.image_pub2 = rospy.Publisher("image_topic2", Image, queue_size = 1)
+
+		self.image_sub1 = message_filters.Subscriber("/camera1/robot/image_raw", Image)
+		self.image_sub2 = message_filters.Subscriber("/camera2/robot/image_raw", Image)
+		self.ts = message_filters.ApproximateTimeSynchronizer([self.image_sub1, self.image_sub2], 10, 1, allow_headerless=True)
+		self.ts.registerCallback(self.callback)
+
 		self.bridge = CvBridge()
 
 	def detect3dyellow(self, img1, img2):
@@ -80,9 +92,37 @@ class angle_calculator
 		angle2 = anglebetween(vectYB, vectBG)
 		angle3 = anglebetween(vectBG, vectGR)
 
-	def callback(self, data):
+		return np.array([angle1, angle2, angle3])
+
+	def callback(self, data1, data2):
 		try:
-	      cv_image1 = self.bridge.imgmsg_to_cv2(data, "bgr8")
-	      cv_image2 = self.bridge.imgmsg_to_cv2(data, "bgr8")
-	    except CvBridgeError as e:
-	      print(e)
+			self.cv_image1 = self.bridge.imgmsg_to_cv2(data1, "bgr8")
+			self.cv_image2 = self.bridge.imgmsg_to_cv2(data2, "bgr8")
+		except CvBridgeError as e:
+			print(e)
+
+		im1 = cv2.imshow('window1', self.cv_image1)
+		im2 = cv2.imshow('window2', self.cv_image2)
+
+		#jointsData = self.jointangles(self.cv_image1, self.cv_image2)
+
+		#self.joints = Float64MultiArray()
+		#self.joints.data = jointsData
+
+		try:
+			self.image_pub1.publish(self.bridge.cv2_to_imgmsg(self.cv_image1, "bgr8"))
+			self.image_pub2.publish(self.bridge.cv2_to_imgmsg(self.cv_image2, "bgr8"))
+			#self.joints_pub.publish(self.joints)
+		except CvBridgeError as e:
+			print(e)
+
+def main(args):
+	  ic = angle_calculator()
+	  try:
+		rospy.spin()
+	  except KeyboardInterrupt:
+		print("Shutting down")
+	  cv2.destroyAllWindows()
+
+if __name__ == '__main__':
+    main(sys.argv)
