@@ -93,8 +93,8 @@ class angle_calculator:
 		'''
 
 		angle1 = self.anglebetween(vect0, vectYB)
-		angle2 = self.anglebetween(vectYB, vectBG)
-		angle3 = self.anglebetween(vectBG, vectGR)
+		angle2 = self.anglebetween(vectYB, vectBG) - angle1
+		angle3 = self.anglebetween(vectBG, vectGR) - angle1 - angle2
 
 		return np.array([angle1, angle2, angle3])
 
