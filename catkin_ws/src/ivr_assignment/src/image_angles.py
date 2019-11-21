@@ -138,8 +138,8 @@ class angle_calculator:
 		except CvBridgeError as e:
 			print(e)
 
-		self.link1 = cv2.inRange(cv2.imread('link1.png', 1), (200, 200, 200), (255, 255, 255))
-		self.link2 = cv2.inRange(cv2.imread('link2.png', 1), (200, 200, 200), (255, 255, 255))
+		#self.link1 = cv2.inRange(cv2.imread('link1.png', 1), (200, 200, 200), (255, 255, 255))
+		#self.link2 = cv2.inRange(cv2.imread('link2.png', 1), (200, 200, 200), (255, 255, 255))
 
 		jointsData = self.jointangles(self.cv_image1, self.cv_image2)
 

@@ -13,10 +13,15 @@ class controller:
     def __init__(self):
         rospy.init_node('controller', anonymous=True)
 
-        self.robot_joint1_pub = rospy.Publisher("/robot/joint1positioncontroller/command", Float64, queue_size=10)
-        self.robot_joint2_pub = rospy.Publisher("/robot/joint1positioncontroller/command", Float64, queue_size=10)
-        self.robot_joint3_pub = rospy.Publisher("/robot/joint1positioncontroller/command", Float64, queue_size=10)
-        self.robot_joint4_pub = rospy.Publisher("/robot/joint1positioncontroller/command", Float64, queue_size=10)
+        self.robot_joint1_pub = rospy.Publisher("/robot/joint1_position_controller/command", Float64, queue_size=10)
+        self.robot_joint2_pub = rospy.Publisher("/robot/joint2_position_controller/command", Float64, queue_size=10)
+        self.robot_joint3_pub = rospy.Publisher("/robot/joint3_position_controller/command", Float64, queue_size=10)
+        self.robot_joint4_pub = rospy.Publisher("/robot/joint4_position_controller/command", Float64, queue_size=10)
+
+        self.j1 = 1.57
+        self.j2 = 1.57
+        self.j3 = 1.57
+        self.j4 = 1.57
 
         self.joints = message_filters.Subscriber("joints_pos", Float64MultiArray)
 
@@ -37,7 +42,8 @@ class controller:
         cur_time = np.array([rospy.get_time() - self.time_trajectory])
         x_d = float(6 * np.cos(cur_time * np.pi / 100))
         y_d = float(6 + np.absolute(1.5 * np.sin(cur_time * np.pi / 100)))
-        z_d = float(2.5)
+        z_d = float(5)
+        print("TRAJECTORY: ", x_d, y_d, z_d)
         return np.array([x_d, y_d, z_d])
 
     def forward_kinematics(self, joints):
@@ -76,13 +82,49 @@ class controller:
         return q_d
 
     def callback(self, joints):
+
+        #print([0.0, 0.0, 0.0, 0.0])
+        #print(self.forward_kinematics([0.0, 0.0, 0.0, 0.0]))
+        #print([-2.2, -1.0, -0.1, -0.9])
+        #print(self.forward_kinematics([2.2, 1.0, 0.1, 0.9]))
+        #print([1.5, 0.1, 0.1, 0.1])
+        #print(self.forward_kinematics([1.5, 0.1, 0.1, 0.1]))
+        #print([3.1, 1.5, 1.0, 1.3])
+        #print(self.forward_kinematics([3.1, 1.5, 1.0, 1.3]))
+        #print([0.1, 0.4, 0.6, 0.5])
+        #print(self.forward_kinematics([0.1, 0.4, 0.6, 0.5]))
+        #print([0.4, 1.2, 1.4, -0.7])
+        #print(self.forward_kinematics([0.4, 1.2, 1.4, -0.7]))
+        #print([0.6, 0.7, -0.8, 0.9])
+        #print(self.forward_kinematics([0.6, 0.7, -0.8, 0.9]))
+        #print([1.0, 1.0, 1.0, 1.0])
+        #print(self.forward_kinematics([1.0, 1.0, 1.0, 1.0]))
+        ##print([0.2, -1.1, 0.7, 0.0])
+        #print(self.forward_kinematics([0.2, -1.1, 0.7, 0.0]))
+        #print([0.0, 1.0, 0.9, -0.3])
+        #print(self.forward_kinematics([0.0, 1.0, 0.9, -0.3]))
+
+        #print(self.j1, self.j2, self.j3, self.j4)
+        print(joints.data)
+
+        print(self.forward_kinematics(joints.data))
+        #print(self.forward_kinematics([self.j1,self.j2,self.j3,self.j4]))
+
         self.joint_moves = self.control_open(joints.data)
+        #self.joint_moves = self.control_open([self.j1,self.j2,self.j3,self.j4])
+
+        print(self.joint_moves)
+        print()
 
         try:
             self.robot_joint1_pub.publish(self.joint_moves[0])
+            #self.j1 = self.joint_moves[0]
             self.robot_joint2_pub.publish(self.joint_moves[1])
+            #self.j2 = self.joint_moves[1]
             self.robot_joint3_pub.publish(self.joint_moves[2])
+            #self.j3 = self.joint_moves[2]
             self.robot_joint4_pub.publish(self.joint_moves[3])
+            #self.j4 = self.joint_moves[3]
         except CvBridgeError as e:
             print(e)
 
