@@ -20,6 +20,7 @@ class angle_calculator:
 		rospy.init_node('image_processing', anonymous=True)
 
 		self.joints_pub = rospy.Publisher("joints_pos", Float64MultiArray, queue_size=10)
+		self.square_pub = rospy.Publisher("square_pos", Float64MultiArray, queue_size=12)
 
 		self.image_sub1 = message_filters.Subscriber("/camera1/robot/image_raw", Image)
 		self.image_sub2 = message_filters.Subscriber("/camera2/robot/image_raw", Image)
@@ -30,41 +31,50 @@ class angle_calculator:
 		self.time_trajectory = rospy.get_time()
 
 	def detectOrange(self, img):
-		mask = cv2.inRange(image, (0,100,200), (0,180,240))
+		mask = cv2.inRange(img, (10,100,160), (100,200,255))
   
 		kernel = np.ones((5, 5), np.uint8)
 		mask = cv2.dilate(mask, kernel, iterations = 3)
 
-		m = cv2.moments(mask)
+		#m = cv2.moments(mask)
 
-		cz = int(m['m10'] / m['m00'])
-		cy = int(m['m01'] / m['m00'])
+		#cx = int(m['m10'] / m['m00'])
+		#cy = int(m['m01'] / m['m00'])
 
-		return np.array([cx, cy])
+		return mask
 
-	def greater(a, b):
-	    momA = cv2.moments(a)        
-	    (xa,ya) = int(momA['m10']/momA['m00']), int(momA['m01']/momA['m00'])
-
-	    momB = cv2.moments(b)        
-	    (xb,yb) = int(momB['m10']/momB['m00']), int(momB['m01']/momB['m00'])
-
-	    if xa > xb:
-	        return 1
-
-	    if xa == xb:
-	        return 0
-	    else:
-	        return -1
-
-	def squarecontours(self, img, tmp):
+	def squarecontours(self, img):
 		center = self.detectOrange(img)
+		contours, hierarchy = cv2.findContours(center, mode=cv2.RETR_EXTERNAL, method=cv2.CHAIN_APPROX_SIMPLE)
 
-		mask = cv2.inRange(img, (0, 0, 0), (1, 1, 1))
-		contours = cv2.findContours(mask, mode=CV_RETR_LIST, method=CV_CHAIN_APPROX_SIMPLE)
+		sqcnt = None
+		for contour in contours:
+			approx = cv2.approxPolyDP(contour, 0.01*cv2.arcLength(contour, True), True)
+			if len(approx) <= 8:
+				sqcnt = contour
 
-		cntsSorted = contours.sort(greater)
-		sqcnt = cntsSorted[1]
+		if sqcnt is not None:
+			m = cv2.moments(sqcnt)
+
+			cx = int(m['m10'] / m['m00'])
+			cy = int(m['m01'] / m['m00'])
+
+			return np.array([cx, cy])
+		else:
+			return np.array([0, 0])
+
+	def squarepos(self, img1, img2):
+		pos1 = self.squarecontours(img1)
+		pos2 = self.squarecontours(img2)
+
+		return np.array([pos1[0], pos2[0], max(pos1[1], pos2[1])])
+
+	def dist_sq_robot(self, img1, img2):
+		pos = self.squarepos(img1, img2)
+		yellowpos = self.detect3dyellow(img1, img2)
+		dist = np.sum((pos - yellowpos)**2)
+		return np.array([float(pos[0]) / 100, float(pos[1]) / 100, float(pos[2]) / 100, np.sqrt(dist) / 100])
+
 
 	def detect3dyellow(self, img1, img2):
 		yellowXY = image1.detect_yellow(img1)
@@ -138,16 +148,17 @@ class angle_calculator:
 		except CvBridgeError as e:
 			print(e)
 
-		self.link1 = cv2.inRange(cv2.imread('link1.png', 1), (200, 200, 200), (255, 255, 255))
-		self.link2 = cv2.inRange(cv2.imread('link2.png', 1), (200, 200, 200), (255, 255, 255))
-
 		jointsData = self.jointangles(self.cv_image1, self.cv_image2)
 
 		self.joints = Float64MultiArray()
 		self.joints.data = jointsData
 
+		self.squaredistance = Float64MultiArray()
+		self.squaredistance.data = self.dist_sq_robot(self.cv_image1, self.cv_image2)
+
 		try:
 			self.joints_pub.publish(self.joints)
+			self.square_pub.publish(self.squaredistance)
 		except CvBridgeError as e:
 			print(e)
 
