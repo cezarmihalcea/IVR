@@ -1,2 +1,2 @@
-ivr_assignment:ivr_lab
+ivr_assignment
 -DCATKIN_DEVEL_PREFIX=/home/cezar/Projects/IVR/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/cezar/Projects/IVR/catkin_ws/install -G Unix Makefiles

@@ -29,6 +29,43 @@ class angle_calculator:
 		self.bridge = CvBridge()
 		self.time_trajectory = rospy.get_time()
 
+	def detectOrange(self, img):
+		mask = cv2.inRange(image, (0,100,200), (0,180,240))
+  
+		kernel = np.ones((5, 5), np.uint8)
+		mask = cv2.dilate(mask, kernel, iterations = 3)
+
+		m = cv2.moments(mask)
+
+		cz = int(m['m10'] / m['m00'])
+		cy = int(m['m01'] / m['m00'])
+
+		return np.array([cx, cy])
+
+	def greater(a, b):
+	    momA = cv2.moments(a)        
+	    (xa,ya) = int(momA['m10']/momA['m00']), int(momA['m01']/momA['m00'])
+
+	    momB = cv2.moments(b)        
+	    (xb,yb) = int(momB['m10']/momB['m00']), int(momB['m01']/momB['m00'])
+
+	    if xa > xb:
+	        return 1
+
+	    if xa == xb:
+	        return 0
+	    else:
+	        return -1
+
+	def squarecontours(self, img, tmp):
+		center = self.detectOrange(img)
+
+		mask = cv2.inRange(img, (0, 0, 0), (1, 1, 1))
+		contours = cv2.findContours(mask, mode=CV_RETR_LIST, method=CV_CHAIN_APPROX_SIMPLE)
+
+		cntsSorted = contours.sort(greater)
+		sqcnt = cntsSorted[1]
+
 	def detect3dyellow(self, img1, img2):
 		yellowXY = image1.detect_yellow(img1)
 		yellowZY = image2.detect_yellow(img2)
@@ -71,32 +108,28 @@ class angle_calculator:
 		blue = self.detect3dblue(img1, img2)
 		green = self.detect3dgreen(img1, img2)
 
+		bluecm1 = np.array([blue[0], blue[1], 0])
+		bluecm2 = np.array([0, blue[1], blue[2]])
+
+		greencm1 = np.array([green[0], green[1], 0])
+		greencm2 = np.array([0, green[1], green[2]])
+
+		vectBG1 = bluecm1 - greencm1
+		vectBG2 = bluecm2 - greencm2
+
 		vectYB = blue - yellow
 		vectBG = green - blue
 		vectGR = red - green
 
-		vect0 = np.array([vectYB[0], 0, vectYB[2]])
+		vect0 = np.array([vectBG[0], 0, vectBG[2]])
+		vectQ = np.array([1, 0, 0])
 
-		'''
-		distYB = 2 / np.sqrt(np.sum(vectYB**2))
-		distBG = 3 / np.sqrt(np.sum(vectBG**2))
-		distGR = 2 / np.sqrt(np.sum(vectGR**2))
-		dist0 = 2 / np.sqrt(np.sum(vect0**2))
+		angle1 = self.anglebetween(vect0, vectQ)
+		angle2 = self.anglebetween(vectYB, vectBG1) - angle1
+		angle3 = self.anglebetween(vectYB, vectBG2) - angle1
+		angle4 = self.anglebetween(vectBG, vectGR) - angle1 - angle2
 
-		dotYBG = np.dot(vectYB, vectBG)
-		dotBGR = np.dot(vectBG, vectGR)
-		dot0YB = np.dot(vect0, vectYB)
-
-		cos0YB = dot0YB / (dist0 * distYB)
-		cosYBG = dotYBG / (distYB * distBG)
-		cosBGR = dotBGR / (distBG * distGR)
-		'''
-
-		angle1 = self.anglebetween(vect0, vectYB)
-		angle2 = self.anglebetween(vectYB, vectBG) - angle1
-		angle3 = self.anglebetween(vectBG, vectGR) - angle1 - angle2
-
-		return np.array([angle1, angle2, angle3])
+		return np.array([angle1, angle2, angle3, angle4])
 
 	def callback(self, data1, data2):
 		try:
@@ -105,8 +138,8 @@ class angle_calculator:
 		except CvBridgeError as e:
 			print(e)
 
-		#im1 = cv2.imshow('window1', self.cv_image1)
-		#im2 = cv2.imshow('window2', self.cv_image2)
+		self.link1 = cv2.inRange(cv2.imread('link1.png', 1), (200, 200, 200), (255, 255, 255))
+		self.link2 = cv2.inRange(cv2.imread('link2.png', 1), (200, 200, 200), (255, 255, 255))
 
 		jointsData = self.jointangles(self.cv_image1, self.cv_image2)
 
@@ -114,8 +147,6 @@ class angle_calculator:
 		self.joints.data = jointsData
 
 		try:
-			#self.image_pub1.publish(self.bridge.cv2_to_imgmsg(self.cv_image1, "bgr8"))
-			#self.image_pub2.publish(self.bridge.cv2_to_imgmsg(self.cv_image2, "bgr8"))
 			self.joints_pub.publish(self.joints)
 		except CvBridgeError as e:
 			print(e)

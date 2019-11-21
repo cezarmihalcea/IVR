@@ -88,10 +88,3 @@
 /home/cezar/Projects/IVR/catkin_ws/build/ivr_assignment/CMakeFiles/test.dir
 /home/cezar/Projects/IVR/catkin_ws/build/ivr_assignment/CMakeFiles/actionlib_generate_messages_nodejs.dir
 /home/cezar/Projects/IVR/catkin_ws/build/ivr_assignment/CMakeFiles/actionlib_generate_messages_py.dir
-/home/cezar/Projects/IVR/catkin_ws/build/ivr_lab/CMakeFiles/install/strip.dir
-/home/cezar/Projects/IVR/catkin_ws/build/ivr_lab/CMakeFiles/edit_cache.dir
-/home/cezar/Projects/IVR/catkin_ws/build/ivr_lab/CMakeFiles/list_install_components.dir
-/home/cezar/Projects/IVR/catkin_ws/build/ivr_lab/CMakeFiles/test.dir
-/home/cezar/Projects/IVR/catkin_ws/build/ivr_lab/CMakeFiles/install/local.dir
-/home/cezar/Projects/IVR/catkin_ws/build/ivr_lab/CMakeFiles/rebuild_cache.dir
-/home/cezar/Projects/IVR/catkin_ws/build/ivr_lab/CMakeFiles/install.dir

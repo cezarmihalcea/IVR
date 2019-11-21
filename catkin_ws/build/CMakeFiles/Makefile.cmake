@@ -17,13 +17,9 @@ set(CMAKE_MAKEFILE_DEPENDS
   "catkin_generated/order_packages.cmake"
   "ivr_assignment/catkin_generated/ordered_paths.cmake"
   "ivr_assignment/catkin_generated/package.cmake"
-  "ivr_lab/catkin_generated/ordered_paths.cmake"
-  "ivr_lab/catkin_generated/package.cmake"
   "/home/cezar/Projects/IVR/catkin_ws/src/CMakeLists.txt"
   "/home/cezar/Projects/IVR/catkin_ws/src/ivr_assignment/CMakeLists.txt"
   "/home/cezar/Projects/IVR/catkin_ws/src/ivr_assignment/package.xml"
-  "/home/cezar/Projects/IVR/catkin_ws/src/ivr_lab/CMakeLists.txt"
-  "/home/cezar/Projects/IVR/catkin_ws/src/ivr_lab/package.xml"
   "/opt/ros/melodic/share/actionlib/cmake/actionlib-msg-extras.cmake"
   "/opt/ros/melodic/share/actionlib/cmake/actionlibConfig-version.cmake"
   "/opt/ros/melodic/share/actionlib/cmake/actionlibConfig.cmake"
@@ -336,7 +332,6 @@ set(CMAKE_MAKEFILE_PRODUCTS
   "gtest/googlemock/CMakeFiles/CMakeDirectoryInformation.cmake"
   "gtest/googlemock/gtest/CMakeFiles/CMakeDirectoryInformation.cmake"
   "ivr_assignment/CMakeFiles/CMakeDirectoryInformation.cmake"
-  "ivr_lab/CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 
 # Dependency information for all targets:
