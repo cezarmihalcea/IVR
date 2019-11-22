@@ -81,7 +81,7 @@ class angle_calculator:
 		self.yellowpos = self.detect3dyellow(img1, img2)
 		if 0 in self.yellowpos:
 			self.yellowpos = oldYellowPos
-		#print("Base at:", yellowpos)
+		#print("Base at:", self.yellowpos)
 		#redpos = self.detect3dred(img1, img2)
 		#print("Red joint at:", redpos)
 		dist = np.sum((self.pos - self.yellowpos)**2)
