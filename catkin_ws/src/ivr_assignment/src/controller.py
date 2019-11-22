@@ -105,17 +105,16 @@ class controller:
         self.error = pos_d - pos
         q = joints  # estimate initial value of joints'
         J_inv = np.linalg.pinv(self.calculate_jacobian(joints))  # calculating the psudeo inverse of Jacobian
-        dq_d = np.dot(J_inv, (np.dot(K_d, self.error_d.transpose()) + np.dot(K_p,
-        self.error.transpose())))  # control input (angular velocity of joints)
+        dq_d = np.dot(J_inv, (np.dot(K_d, self.error_d.transpose()) + np.dot(K_p, self.error.transpose())))  # control input (angular velocity of joints)
         q_d = q + (dt * dq_d)  # control input (angular position of joints)
-        return q_d
+        return J_inv#q_d
 
     def callback(self, joints, dist):
 
-        print([0.0, 0.0, 0.0, 0.0])
-        print(self.forward_kinematics([0.0, 0.0, 0.0, 0.0]))
-        print([0.0, 0.0, 0.0, 0.0])
-        print(self.forward_kinematics([0.0, 1.57, 1.57, 1.57]))
+        #print([0.0, 0.0, 0.0, 0.0])
+        #print(self.forward_kinematics([0.0, 0.0, 0.0, 0.0]))
+        #print([0.0, 0.0, 0.0, 0.0])
+        #print(self.forward_kinematics([0.0, 1.57, 1.57, 1.57]))
         #print([-2.2, -1.0, -0.1, -0.9])
         #print(self.forward_kinematics([2.2, 1.0, 0.1, 0.9]))
         #print([1.5, 0.1, 0.1, 0.1])
@@ -145,7 +144,7 @@ class controller:
         print("Calculated forward kinematics:", self.forward_kinematics(true_joints))
         #print(self.forward_kinematics([self.j1,self.j2,self.j3,self.j4]))
 
-        self.joint_moves = self.control_closed(true_joints, dist.data)
+        self.joint_moves = self.control_closed(joints.data, dist.data)
         #self.joint_moves = self.control_open([self.j1,self.j2,self.j3,self.j4])
 
         print("Joint movements:", self.joint_moves)
