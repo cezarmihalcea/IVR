@@ -17,6 +17,7 @@ class controller:
         self.robot_joint2_pub = rospy.Publisher("/robot/joint2_position_controller/command", Float64, queue_size=10)
         self.robot_joint3_pub = rospy.Publisher("/robot/joint3_position_controller/command", Float64, queue_size=10)
         self.robot_joint4_pub = rospy.Publisher("/robot/joint4_position_controller/command", Float64, queue_size=10)
+        self.effector_pub = rospy.Publisher("/end_effector_position", Float64MultiArray, queue_size=10)
 
         self.j1 = 1.57
         self.j2 = 1.57
@@ -134,10 +135,16 @@ class controller:
         #print([0.0, 1.0, 0.9, -0.3])
         #print(self.forward_kinematics([0.0, 1.0, 0.9, -0.3]))
 
+        print("Current time:", rospy.get_time())
+
         #print(self.j1, self.j2, self.j3, self.j4)
         print("Current joint positions:", joints.data)
 
         print("Calculated forward kinematics:", self.forward_kinematics(joints.data))
+
+        end_pos = Float64MultiArray()
+        end_pos.data = self.forward_kinematics(joints.data)
+        self.effector_pub.publish(end_pos)
         #print(self.forward_kinematics([self.j1,self.j2,self.j3,self.j4]))
 
         self.joint_moves = self.control_closed(joints.data, dist.data)
