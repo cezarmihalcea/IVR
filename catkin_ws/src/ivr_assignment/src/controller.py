@@ -79,7 +79,7 @@ class controller:
         # desired trajectory - will replace with desired coordinates of orange floaty square
         #pos_d= self.trajectory()
         pos_d = np.array([dist[0], dist[1], dist[2]])
-        print("Target:", pos_d)
+        #print("Target:", pos_d)
         # estimate derivative of desired trajectory
         self.error_d = (pos_d - self.error)/dt
         self.error = pos_d
@@ -99,7 +99,7 @@ class controller:
         pos = self.forward_kinematics(joints)
         # desired trajectory
         pos_d = np.array([dist[0], dist[1], dist[2]])
-        print("Target:", pos_d)
+        #print("Target:", pos_d)
         # estimate derivative of error
         self.error_d = ((pos_d - pos) - self.error) / dt
         # estimate error
@@ -135,12 +135,12 @@ class controller:
         #print([0.0, 1.0, 0.9, -0.3])
         #print(self.forward_kinematics([0.0, 1.0, 0.9, -0.3]))
 
-        print("Current time:", rospy.get_time())
+        #print("Current time:", rospy.get_time())
 
         #print(self.j1, self.j2, self.j3, self.j4)
-        print("Current joint positions:", joints.data)
+        #print("Current joint positions:", joints.data)
 
-        print("Calculated forward kinematics:", self.forward_kinematics(joints.data))
+        #print("Calculated forward kinematics:", self.forward_kinematics(joints.data))
 
         end_pos = Float64MultiArray()
         end_pos.data = self.forward_kinematics(joints.data)
@@ -150,8 +150,8 @@ class controller:
         self.joint_moves = self.control_closed(joints.data, dist.data)
         #self.joint_moves = self.control_open([self.j1,self.j2,self.j3,self.j4])
 
-        print("Joint movements:", self.joint_moves)
-        print ""
+        #print("Joint movements:", self.joint_moves)
+        #print ""
 
         try:
             self.robot_joint1_pub.publish(self.joint_moves[0])
