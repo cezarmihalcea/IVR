@@ -158,29 +158,6 @@ class angle_calculator:
 		#angle2 = self.anglebetween(vectYB, vectBG1)
 
 		angle1 = (3.14 - self.anglebetween(vect0, vectQ)) - angle3
-
-		lengthGR = self.length(vectGR)
-		redbasepos = np.array([green[0] + lengthGR, green[1] + lengthGR, green[2] + lengthGR])
-
-		if angle1 <= 1.57:
-			if green[0] > 410:
-				angle2 = -angle2
-				redbasepos[0] = green[0] - lengthGR
-			if green[2] < 410:
-				angle3 = -angle3
-				redbasepos[2] = green[2] - lengthGR
-			print(redbasepos)
-			if red[0] > redbasepos[0]:
-				angle4 = -angle4
-		else:
-			if green[2] < 410:
-				angle2 = -angle2
-			if green[0] > 410:
-				angle3 = -angle3
-			if red[0] < redbasepos[0]:
-				angle4 = -angle4
-
-
 		return np.array([angle1, angle2, angle3, angle4])
 
 	def callback(self, data1, data2):
