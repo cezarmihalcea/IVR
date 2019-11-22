@@ -15,52 +15,60 @@ def detect_green(image):
   
   kernel = np.ones((5, 5), np.uint8)
   mask = cv2.dilate(mask, kernel, iterations = 3)
-  
-  m = cv2.moments(mask)
-  
-  cz = int(m['m10'] / m['m00'])
-  cy = int(m['m01'] / m['m00'])
-  
-  return np.array([cz, cy])
+  if np.sum(mask) != 0:
+    m = cv2.moments(mask)
+    
+    cx = int(m['m10'] / m['m00'])
+    cy = int(m['m01'] / m['m00'])
+    
+    return np.array([cx, cy])
+  else:
+    return np.array([0, 0])
   
 def detect_red(image):
   mask = cv2.inRange(image, (0,0,100), (0,0,255))
   
   kernel = np.ones((5, 5), np.uint8)
   mask = cv2.dilate(mask, kernel, iterations = 3)
-  
-  m = cv2.moments(mask)
-  
-  cz = int(m['m10'] / m['m00'])
-  cy = int(m['m01'] / m['m00'])
-  
-  return np.array([cz, cy])
+  if np.sum(mask) != 0:
+    m = cv2.moments(mask)
+    
+    cx = int(m['m10'] / m['m00'])
+    cy = int(m['m01'] / m['m00'])
+    
+    return np.array([cx, cy])
+  else:
+    return np.array([0, 0])
 
 def detect_blue(image):
   mask = cv2.inRange(image, (100,0,0), (255,0,0))
   
   kernel = np.ones((5, 5), np.uint8)
   mask = cv2.dilate(mask, kernel, iterations = 3)
-  
-  m = cv2.moments(mask)
-  
-  cz = int(m['m10'] / m['m00'])
-  cy = int(m['m01'] / m['m00'])
-  
-  return np.array([cz, cy])
+  if np.sum(mask) != 0:
+    m = cv2.moments(mask)
+    
+    cx = int(m['m10'] / m['m00'])
+    cy = int(m['m01'] / m['m00'])
+    
+    return np.array([cx, cy])
+  else:
+    return np.array([0, 0])
 
 def detect_yellow(image):
   mask = cv2.inRange(image, (0,100,100), (0,255,255))
   
   kernel = np.ones((5, 5), np.uint8)
   mask = cv2.dilate(mask, kernel, iterations = 3)
-  
-  m = cv2.moments(mask)
-  
-  cz = int(m['m10'] / m['m00'])
-  cy = int(m['m01'] / m['m00'])
-  
-  return np.array([cz, cy])
+  if np.sum(mask) != 0:
+    m = cv2.moments(mask)
+    
+    cx = int(m['m10'] / m['m00'])
+    cy = int(m['m01'] / m['m00'])
+    
+    return np.array([cx, cy])
+  else:
+    return np.array([0, 0])
 
 class image_converter:
 
