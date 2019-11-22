@@ -83,7 +83,7 @@ class angle_calculator:
 			self.yellowpos = oldYellowPos
 		#print("Base at:", self.yellowpos)
 		#redpos = self.detect3dred(img1, img2)
-		#print("Red joint at:", redpos)
+		#print("Red joint at:", [((float(redpos[1])-self.yellowpos[1]) / 25) + 5.5, ((float(redpos[0])-self.yellowpos[0]) / 25) - 0.7, ((float(redpos[2])-self.yellowpos[2]) / 25) + 5])
 		dist = np.sum((self.pos - self.yellowpos)**2)
 		#print("Result:", [(float(pos[0])-yellowpos[0]) / 25, (float(pos[1])-yellowpos[1]) / 25, (float(pos[2])-yellowpos[2]) / 25, np.sqrt(dist) / 25])
 		return np.array([((float(self.pos[1])-self.yellowpos[1]) / 25) + 5.5, ((float(self.pos[0])-self.yellowpos[0]) / 25) - 0.7, ((float(self.pos[2])-self.yellowpos[2]) / 25) + 5, np.sqrt(dist) / 25])
