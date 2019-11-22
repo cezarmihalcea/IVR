@@ -80,28 +80,28 @@ class angle_calculator:
 		yellowXY = image1.detect_yellow(img1)
 		yellowZY = image2.detect_yellow(img2)
 
-		xyz = np.array([yellowXY[0], yellowXY[1], yellowZY[0]])
+		xyz = np.array([yellowXY[0], max(yellowXY[1], yellowZY[1]), yellowZY[0]])
 		return xyz
 
 	def detect3dred(self, img1, img2):
 		redXY = image1.detect_red(img1)
 		redZY = image2.detect_red(img2)
 
-		xyz = np.array([redXY[0], redXY[1], redZY[0]])
+		xyz = np.array([redXY[0], max(redXY[1], redZY[1]), redZY[0]])
 		return xyz
 
 	def detect3dblue(self, img1, img2):
 		blueXY = image1.detect_blue(img1)
 		blueZY = image2.detect_blue(img2)
 
-		xyz = np.array([blueXY[0], blueXY[1], blueZY[0]])
+		xyz = np.array([blueXY[0], max(blueXY[1], blueZY[1]), blueZY[0]])
 		return xyz
 
 	def detect3dgreen(self, img1, img2):
 		greenXY = image1.detect_green(img1)
 		greenZY = image2.detect_green(img2)
 
-		xyz = np.array([greenXY[0], greenXY[1], greenZY[0]])
+		xyz = np.array([greenXY[0], max(greenXY[1], greenZY[1]), greenZY[0]])
 		return xyz
 
 	def unitvector(self, vector):
