@@ -50,7 +50,7 @@ class angle_calculator:
 		sqcnt = None
 		for contour in contours:
 			approx = cv2.approxPolyDP(contour, 0.01*cv2.arcLength(contour, True), True)
-			if len(approx) <= 8:
+			if len(approx) >= 8:
 				sqcnt = contour
 
 		if sqcnt is not None:
@@ -107,10 +107,14 @@ class angle_calculator:
 	def unitvector(self, vector):
 		return vector / np.linalg.norm(vector)
 
+	def dotproduct(self, v1, v2):
+		return np.sum(v1*v2)
+
+	def length(self, v):
+		return np.sqrt(self.dotproduct(v, v))
+
 	def anglebetween(self, v1, v2):
-		uv1 = self.unitvector(v1)
-		uv2 = self.unitvector(v2)
-		return np.arccos(np.clip(np.dot(uv1, uv2), -1.0, 1.0))
+		return np.arccos(self.dotproduct(v1, v2) / (self.length(v1) * self.length(v2)))
 
 	def jointangles(self, img1, img2):
 		yellow = self.detect3dyellow(img1, img2)
@@ -127,18 +131,20 @@ class angle_calculator:
 		vectBG1 = bluecm1 - greencm1
 		vectBG2 = bluecm2 - greencm2
 
-		vectYB = blue - yellow
-		vectBG = green - blue
-		vectGR = red - green
+		vectYB = yellow - blue
+		vectBG = blue - green
+		vectGR = green - red
 
 		vect0 = np.array([vectBG[0], 0, vectBG[2]])
 		vectQ = np.array([1, 0, 0])
 
-		angle1 = self.anglebetween(vect0, vectQ)
-		angle2 = self.anglebetween(vectYB, vectBG1) - angle1
-		angle3 = self.anglebetween(vectYB, vectBG2) - angle1
-		angle4 = self.anglebetween(vectBG, vectGR) - angle1 - angle2
+		angle3 = self.anglebetween(vectYB, np.array([vectYB[0], vectYB[1], vectBG[2]]))
+		angle2 = self.anglebetween(vectYB, np.array([vectYB[0], vectBG[1], vectYB[2]]))
 
+		angle4 = self.anglebetween(vectBG, vectGR)
+		#angle2 = self.anglebetween(vectYB, vectBG1)
+
+		angle1 = self.anglebetween(vect0, vectQ) - angle3
 		return np.array([angle1, angle2, angle3, angle4])
 
 	def callback(self, data1, data2):
@@ -152,6 +158,8 @@ class angle_calculator:
 
 		self.joints = Float64MultiArray()
 		self.joints.data = jointsData
+
+		print(self.joints)
 
 		self.squaredistance = Float64MultiArray()
 		self.squaredistance.data = self.dist_sq_robot(self.cv_image1, self.cv_image2)
