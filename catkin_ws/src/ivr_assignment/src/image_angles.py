@@ -121,7 +121,7 @@ class angle_calculator:
 		red = self.detect3dred(img1, img2)
 		blue = self.detect3dblue(img1, img2)
 		green = self.detect3dgreen(img1, img2)
-
+		
 		bluecm1 = np.array([blue[0], blue[1], 0])
 		bluecm2 = np.array([0, blue[1], blue[2]])
 
@@ -131,20 +131,20 @@ class angle_calculator:
 		vectBG1 = bluecm1 - greencm1
 		vectBG2 = bluecm2 - greencm2
 
-		vectYB = yellow - blue
-		vectBG = blue - green
-		vectGR = green - red
+		vectYB = blue - yellow
+		vectBG = green - blue
+		vectGR = red - green
 
 		vect0 = np.array([vectBG[0], 0, vectBG[2]])
 		vectQ = np.array([1, 0, 0])
 
-		angle3 = self.anglebetween(vectYB, np.array([vectYB[0], vectYB[1], vectBG[2]]))
-		angle2 = self.anglebetween(vectYB, np.array([vectYB[0], vectBG[1], vectYB[2]]))
+		angle3 = self.anglebetween(vectBG, np.array([vectBG[0], vectBG[1], 0]))
+		angle2 = self.anglebetween(vectYB, np.array([vectBG[0], vectBG[1], 0]))
 
 		angle4 = self.anglebetween(vectBG, vectGR)
 		#angle2 = self.anglebetween(vectYB, vectBG1)
 
-		angle1 = self.anglebetween(vect0, vectQ) - angle3
+		angle1 = (3.14 - self.anglebetween(vect0, vectQ)) - angle3
 		return np.array([angle1, angle2, angle3, angle4])
 
 	def callback(self, data1, data2):
