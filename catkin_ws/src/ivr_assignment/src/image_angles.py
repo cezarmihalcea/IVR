@@ -29,6 +29,8 @@ class angle_calculator:
 
 		self.bridge = CvBridge()
 		self.time_trajectory = rospy.get_time()
+		self.pos = [0,0,0]
+		self.yellowpos = [0,0,0]
 
 	def detectOrange(self, img):
 		mask = cv2.inRange(img, (10,100,160), (100,200,255))
@@ -70,10 +72,21 @@ class angle_calculator:
 		return np.array([pos1[0], pos2[0], max(pos1[1], pos2[1])])
 
 	def dist_sq_robot(self, img1, img2):
-		pos = self.squarepos(img1, img2)
-		yellowpos = self.detect3dyellow(img1, img2)
-		dist = np.sum((pos - yellowpos)**2)
-		return np.array([float(pos[0]) / 100, float(pos[1]) / 100, float(pos[2]) / 100, np.sqrt(dist) / 100])
+		oldPos = self.pos
+		self.pos = self.squarepos(img1, img2)
+		if 0 in self.pos:
+			self.pos = oldPos
+		#print("Detected at:", pos)
+		oldYellowPos = self.yellowpos
+		self.yellowpos = self.detect3dyellow(img1, img2)
+		if 0 in self.yellowpos:
+			self.yellowpos = oldYellowPos
+		#print("Base at:", yellowpos)
+		#redpos = self.detect3dred(img1, img2)
+		#print("Red joint at:", redpos)
+		dist = np.sum((self.pos - self.yellowpos)**2)
+		#print("Result:", [(float(pos[0])-yellowpos[0]) / 25, (float(pos[1])-yellowpos[1]) / 25, (float(pos[2])-yellowpos[2]) / 25, np.sqrt(dist) / 25])
+		return np.array([((float(self.pos[1])-self.yellowpos[1]) / 25) + 5.5, ((float(self.pos[0])-self.yellowpos[0]) / 25) - 0.7, ((float(self.pos[2])-self.yellowpos[2]) / 25) + 5, np.sqrt(dist) / 25])
 
 
 	def detect3dyellow(self, img1, img2):
@@ -159,7 +172,7 @@ class angle_calculator:
 		self.joints = Float64MultiArray()
 		self.joints.data = jointsData
 
-		print(self.joints)
+		#print(self.joints)
 
 		self.squaredistance = Float64MultiArray()
 		self.squaredistance.data = self.dist_sq_robot(self.cv_image1, self.cv_image2)

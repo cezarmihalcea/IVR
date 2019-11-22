@@ -134,6 +134,8 @@ class controller:
         #print([0.0, 1.0, 0.9, -0.3])
         #print(self.forward_kinematics([0.0, 1.0, 0.9, -0.3]))
 
+        print("Current time:", rospy.get_time())
+
         #print(self.j1, self.j2, self.j3, self.j4)
         print("Current joint positions:", joints.data)
 
